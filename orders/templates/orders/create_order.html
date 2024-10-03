@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% load static %}
+{% load carts_tags %}
+
+{% user_carts request as carts %}
+
+<br>
+<div class="container">
+
+  <div class="row">
+    {% for cart in carts %}
+    <div class="card mb-3 text-bg-light shadow-lg">
+      <div class="card-header">
+        <div class="card-title">{{cart.product.name}}
+
+          <a href="{% url 'cart:cart_remove' cart.id %}" type="button"
+            class="btn-close" aria-label="Close"></a>
+        </div>
+
+        <div class="col">
+        </div>
+        {{cart.product.discount_price}} грн
+
+        <div class="col-6">
+          <div class="input-group">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-secondary btn-sm decrement"
+                data-cart-id
+                data-cart-change-url>-</button>
+            </span>
+            <input type="text" class="form-control number"
+              value="{{cart.quantity}}" readonly>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-secondary btn-sm increment"
+                data-cart-id
+                data-cart-change-url>+</button>
+            </span>
+            <p style="padding-left: 10px;">= {{cart.products_price}} грн</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <div class="modal-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            Кількість товарів: {{carts.total_quantity}}
+          </div>
+          <div class="col">
+            Ітогова ціна: {{carts.total_price}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+</div>
+
+<div class="container">
+  <form action="{% url "orders:create_order" %}" method="post">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="id_first_name" class="form-label">І'мя*:</label>
+            <input type="text" class="form-control" id="id_first_name"
+                value="{% if form.first_name.value %}{{ form.first_name.value }}{% endif %}"
+                name="first_name" required>
+            {% if form.first_name.errors %}
+                <div class="alert alert-danger alert-dismissible fade show">{{form.first_name.errors}}</div>
+            {% endif %}
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="id_last_name" class="form-label">Прзівище*:</label>
+            <input type="text" class="form-control" id="id_last_name" name="last_name"
+            value="{% if form.last_name.value %}{{ form.last_name.value }}{% endif %}"
+            required>
+            {% if form.last_name.errors %}
+                <div class="alert alert-danger alert-dismissible fade show">{{form.last_name.errors}}</div>
+            {% endif %}
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="id_phone_number" class="form-label">Номер телефону:</label>
+            <input type="text" class="form-control" id="id_phone_number" name="phone_number"
+                value="{% if form.phone_number.value %}{{ form.phone_number.value }}{% endif %}"
+                placeholder="В формате: XXX-XXX-XX-XX"
+                required>
+            {% if form.phone_number.errors %}
+                <div class="alert alert-danger alert-dismissible fade show">{{form.phone_number.errors}}</div>
+            {% endif %}
+        </div>
+        <div class="col-md-12 mb-3">
+            <label for="delivery" class="form-label">Спосіб доставки: </label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="requires_delivery"
+                    id="id_requires_delivery" value="1" checked>
+                <label class="form-check-label" for="id_requires_delivery">Нужна
+                    доставка</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="requires_delivery"
+                    id="id_requires_delivery" value="0">
+                <label class="form-check-label" for="id_requires_delivery">Самовивіз</label>
+            </div>
+        </div>
+        <div class="mb-3" id="deliveryAddressField">
+            <label for="id_delivery_address" class="form-label">Адреса
+                доставки*:</label>
+            <textarea class="form-control" id="id_delivery_address"
+                value="{% if form.delivery_address.value %}{{ form.delivery_address.value }}{% endif %}"
+                name="delivery_address" rows="2"></textarea>
+            {% if form.delivery_address.errors %}
+                <div class="alert alert-danger alert-dismissible fade show">{{form.delivery_address.errors}}</div>
+            {% endif %}
+        </div>
+        
+    </div>
+</form>
+  <br>
+  <!-- Замовити -->
+  <div class="row justify-content-md-center">
+    <div class="col-md-auto">
+      <a href="{% url 'orders:done_order' user.id %}" type="button" style="width: 300px;"
+        class="btn btn-secondary">Замовити</a>
+    </div>
+  </div>
+  {% endblock content %}
+</div>

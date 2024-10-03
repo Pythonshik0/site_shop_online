@@ -1,0 +1,72 @@
+{% load static %}
+{% load carts_tags %}
+
+{% user_carts request as carts %}
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Корзина</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      {% for cart in carts %}
+
+      <div class="modal-body">
+        {% csrf_token %}
+        <div class="row">
+          <div class="card mb-3 text-bg-light shadow-lg">
+            <div class="card-header">
+              <div class="card-title">{{ cart.product.name }}
+                <a href="{% url 'cart:cart_remove' cart.id %}" type="button" class="btn-close" aria-label="Закрыть"></a>
+              </div>
+
+              {{ cart.product.discount_price }} грн
+              <div class="col-6">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                    <a href="{% url 'cart:cart_change' cart.product.slug %}" type="button" class="btn btn-secondary btn-sm decrement" data-cart-id
+                      data-cart-change-url>-</a>
+                  </span>
+
+                  <input type="text" class="form-control number" value="{{ cart.quantity }}" readonly>
+                  <span class="input-group-btn">
+
+                    <a href="{% url 'cart:cart_add' cart.product.slug %}" type="button"
+                      class="btn btn-secondary btn-sm increment"
+                      data-cart-id data-cart-change-url>+</a>
+                  </span>
+
+                  <p style="padding-left: 10px;">= {{ cart.products_price }} грн</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="modal-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              Количество товаров: {{ carts.total_quantity }}
+            </div>
+            <div class="col">
+              Итоговая цена: {{ carts.total_price }}
+            </div>
+          </div>
+          <br>
+          <div class="row justify-content-md-center">
+            <div class="col-md-auto">
+              {% if carts %}
+
+              <a href="{% url 'orders:create_order' %}" type="button" style="width: 300px;"
+                class="btn btn-secondary">Оформить заказ</a>
+
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

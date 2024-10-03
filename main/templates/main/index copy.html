@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{%load static%}
+
+{% block title %}
+<title>{{title}}</title>
+{% endblock title %}
+
+
+{% block content %}
+
+    <section class="welcome-photo text-center">
+        <img src="{% static 'images/logofullsize.png' %}" alt="Добро пожаловать в наш магазин">
+
+    </section>
+    <section class="banner text-center py-5">
+        <div class="container">
+            <h2 class="display-4 mb-4">Поделитесь своим стилем с нами!</h2>
+            <p class="lead">Большой выбор стильной женской одежды на любой случай.</p>
+            <a href="{% url 'goods:index' category_slug='all' %}" class="btn btn-primary btn-lg">Каталог</a>
+
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <hr>
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature text-center mb-4">
+                        <i class="fas fa-shipping-fast fa-4x mb-4"></i>
+                        <h3>Быстрая доставка</h3>
+                        <p>Получите ваши покупки в течение 1-3 дней.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature text-center mb-4">
+                        <i class="fas fa-sync fa-4x mb-4"></i>
+                        <h3>Возврат в течение 30 дней</h3>
+                        <p>Мы принимаем возврат в течение 30 дней после покупки.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature text-center mb-4">
+                        <i class="fas fa-headset fa-4x mb-4"></i>
+                        <h3>Круглосуточная поддержка</h3>
+                        <p>Наша команда готова помочь вам 24/7.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+
+{% endblock content %}
